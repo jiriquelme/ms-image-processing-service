@@ -35,4 +35,5 @@ jobs:
     # 5. Ejecutar el linter flake8 para verificar la calidad del código
     - name: Lint with flake8
       run: |
+        cd image_processing_service
         flake8 .
