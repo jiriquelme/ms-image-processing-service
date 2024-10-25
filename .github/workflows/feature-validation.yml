@@ -1,0 +1,39 @@
+name: Feature Validation
+
+# Se activa el pipeline en push a cualquier rama feature/*
+on:
+  push:
+    branches:
+      - 'feature-*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout del código
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Configurar Python
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    # 3. Instalar dependencias
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 4. Ejecutar pruebas unitarias
+    - name: Run unit tests
+      run: |
+        python manage.py test
+
+    # 5. Ejecutar el linter flake8 para verificar la calidad del código
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 .
