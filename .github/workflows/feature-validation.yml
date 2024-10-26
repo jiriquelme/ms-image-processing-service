@@ -45,7 +45,7 @@ jobs:
     # 5. Ejecutar el linter flake8 para verificar la calidad del código
     - name: Run flake8 Linting
       run: |
-        flake8 image_processing_service --output-file=image_processing_service/flake8-report.txt
+        flake8 image_processing_service --output-file=flake8-report.txt
       continue-on-error: true
 
     - name: Show flake8 Results
