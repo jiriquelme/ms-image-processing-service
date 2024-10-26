@@ -45,7 +45,7 @@ jobs:
     # 5. Ejecutar el linter flake8 para verificar la calidad del código
     - name: Run flake8 Linting
       run: |
-        flake8 image_processing_service --output-file=flake8-report.txt
+        flake8 --output-file=flake8-report.txt
       continue-on-error: true
 
     - name: Show flake8 Results
@@ -55,9 +55,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: flake8-report
-        path: image_processing_service/flake8-report.txt
+        path: flake8-report.txt
 
     - name: Check flake8 Report Existence
       run: |
-        if [ -f "image_processing_service/flake8-report.txt" ]; then echo "flake8 report found."; else echo "flake8 report not found."; fi
+        if [ -f "flake8-report.txt" ]; then echo "flake8 report found."; else echo "flake8 report not found."; fi
 
