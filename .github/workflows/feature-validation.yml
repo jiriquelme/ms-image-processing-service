@@ -34,7 +34,6 @@ jobs:
       continue-on-error: true
 
     - name: Show Bandit Results
-      if: failure()
       run: cat bandit-output.txt
 
     - name: Upload Bandit Report
