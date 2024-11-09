@@ -41,6 +41,6 @@ jobs:
 
       - name: Add reviewer and label
         env:
-          IPTOKEN: ${{ secrets.IPTOKEN }}
+          GH_TOKEN: ${{ secrets.IPTOKEN }}
         run: |
           gh issue edit ${{ github.event.pull_request.number }} --add-label "Listo para revisar"
