@@ -43,5 +43,4 @@ jobs:
         env:
           IPTOKEN: ${{ secrets.IPTOKEN }}
         run: |
-          gh pr label ${{ github.event.pull_request.number }} "Listo para revisar"
-
+          gh issue label ${{ github.event.pull_request.number }} -l "Listo para revisar"
