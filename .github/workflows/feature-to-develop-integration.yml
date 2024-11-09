@@ -40,7 +40,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Add reviewer and label
+        env:
+          GH_TOKEN: ${{ secrets.IPTOKEN }}
         run: |
-          # Opcional: Usa la API de GitHub para asignar revisores y etiquetas automáticas
-          gh pr edit ${{ github.event.pull_request.number }} --add-reviewer "your-reviewer-username"
-          gh pr edit ${{ github.event.pull_request.number }} --add-label "ready for review"
+          gh pr review --approve ${{ github.event.pull_request.number }}
+          gh pr label ${{ github.event.pull_request.number }} "label-name"
+
