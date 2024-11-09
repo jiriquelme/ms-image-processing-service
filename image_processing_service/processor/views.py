@@ -20,6 +20,9 @@ def process_image(request):
             return JsonResponse({'error': 'No text found'}, status=404)
         
         detected_text = texts[0].description
+
+        print(f"Texto detectado: {detected_text}")
+
         return JsonResponse({'text': detected_text})
     
     return JsonResponse({'error': 'Invalid request'}, status=400)
