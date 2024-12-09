@@ -1,0 +1,63 @@
+name: Feature Validation
+
+# Se activa el pipeline en push a cualquier rama feature/*
+on:
+  push:
+    branches:
+      - 'feature-*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout del código
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Configurar Python
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    # 3. Instalar dependencias
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # 4. Bandit
+    - name: Run Bandit Security Scan
+      run: |
+        bandit -r . -f txt -o bandit-output.txt --severity-level medium
+      continue-on-error: true
+
+    - name: Show Bandit Results
+      run: cat bandit-output.txt
+
+    - name: Upload Bandit Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: bandit-report
+        path: bandit-output.txt
+
+    # 5. Ejecutar el linter flake8 para verificar la calidad del código
+    - name: Run flake8 Linting
+      run: |
+        flake8 --output-file=flake8-report.txt
+      continue-on-error: true
+
+    - name: Show flake8 Results
+      run: cat flake8-report.txt
+
+    - name: Upload flake8 Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: flake8-report
+        path: flake8-report.txt
+
+    - name: Check flake8 Report Existence
+      run: |
+        if [ -f "flake8-report.txt" ]; then echo "flake8 report found."; else echo "flake8 report not found."; fi
+

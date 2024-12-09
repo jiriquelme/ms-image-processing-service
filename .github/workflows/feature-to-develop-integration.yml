@@ -1,0 +1,47 @@
+# Nombre del archivo: feature-to-develop-pr.yml
+name: Feature to Develop PR Integration
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths-ignore:
+      - 'docs/**'  # Puedes ignorar ciertos cambios si no necesitas pruebas para ellos
+    types: [opened, synchronize, reopened]  # Se ejecuta cuando se abre, actualiza o reabre un PR
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'  # Cambia según tu versión de Python
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          cd image_processing_service
+          pytest
+
+  review:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Add reviewer and label
+        env:
+          GH_TOKEN: ${{ secrets.IPTOKEN }}
+        run: | # La etiqueta debe estar creada previamente
+          gh issue edit ${{ github.event.pull_request.number }} --add-label "Listo para revisar" 
+
